@@ -1,17 +1,13 @@
-const {readFile, writeFile} = require('fs').promises;
-const start = async () => {
-    try {
-        const first = await readFile('./content/first.txt','utf8');
-        const second = await readFile('./content/second.txt','utf8');
-        await writeFile(
-            './content/result-mind-grenade.txt',
-            `THIS IS AWESOME : ${first} ${second}`,
-            {flag: 'a'}
-        )
-        console.log(first,second)
-    } catch (error) {
-        console.log(error);
-    }
-}
+const EventEmitter = require('events');
 
-start();
+const customEmitter = new EventEmitter();
+
+customEmitter.on('response', (name,id) =>{
+    console.log(`data recieved user ${name} with id : ${id}`)
+})
+customEmitter.on('response', () =>{
+    console.log(`some other logic here`)
+})
+
+
+customEmitter.emit('response','john',34);
