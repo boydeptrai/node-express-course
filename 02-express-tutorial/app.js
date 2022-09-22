@@ -1,25 +1,18 @@
 const express = require('express')
 const app = express()
-const morgan = require('morgan')
-const logger = require('./logger')
-const authorize = require('./authorize')
+const people = require('./routes/people')
+const auth = require('./routes/auth')
 const port = 5000
 
-//req =>middleware =>res
-// app.use([logger,authorize])
-app.use(morgan('tiny'))
+//static assets
+app.use(express.static('./methods-public'))
+//parse from data
+app.use(express.urlencoded({extended: false}))
+//parse json
+app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.send('Home')
-})
+app.use('/api/people',people)
+app.use('/login',auth)
 
-app.get('./about',(req,res) =>{
-    res.send('About')
-})
-app.get('/api/products',(req,res) =>{
-    res.send('Products')
-})
-app.get('/api/items',(req,res) =>{
-    res.send('Items')
-})
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
